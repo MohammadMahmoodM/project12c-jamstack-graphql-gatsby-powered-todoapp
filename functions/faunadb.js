@@ -1,6 +1,6 @@
-const {ApolloServer,gql} = require('apollo-server-lambda');
-const faunadb=require('faunadb')
-const query=faunadb.query;
+const { ApolloServer, gql } = require('apollo-server-lambda');
+const faunadb = require('faunadb')
+const query = faunadb.query;
 
 
 const typeDefs = gql`
@@ -16,22 +16,20 @@ const typeDefs = gql`
   type todos {
     todos:[todo]
   }
-
+  type Mutation {
+    addTodo(title:String):todo
+  }
 `;
 
+const client = new faunadb.Client({
+  secret: process.env.FAUNADB_SERVER_SECRET,
+});
+
 const resolvers = {
+
   Query: {
-    message: (parent, args, context) => {
-      return "Hello, world from Zia!";
-    },
-    name: (parent, args, context) => {
-      return "Mahmood!";
-    },
     todos:async (parent,args,context)=>{     
       try{
-        const client = new faunadb.Client({
-          secret: process.env.FAUNADB_SERVER_SECRET,
-        });
         var result = await client.query(
           query.Map(
             query.Paginate(query.Documents(query.Collection("todos"))),
@@ -46,6 +44,31 @@ const resolvers = {
           // return "error.errorMessage"
         }
     }
+  },
+  Mutation:{
+    addTodo:async (_,{title})=>{
+      const item = {
+        data:{title:title}
+      }
+      console.log("title",item)
+      /* construct the fauna query */
+      try{
+        const result=await client.query(query.Create(query.Collection('todos'), item))
+        console.log("result",result);
+
+        return {
+          title:result.data.title,
+          id:result.ref.id
+        }
+      }
+      catch(error){
+        console.log("Error",error);
+        return {
+          title:"error",
+          id:"1"
+        }
+      }
+    }
   }
 };
 
@@ -55,5 +78,4 @@ const server=new ApolloServer({
   playground:true,
   introspection:true
 });
-
 exports.handler=server.createHandler();
