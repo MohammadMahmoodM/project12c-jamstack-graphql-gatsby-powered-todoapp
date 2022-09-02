@@ -19,6 +19,7 @@ const typeDefs = gql`
   type Mutation {
     addTodo(title:String):todo
     deleteTodo(id:String):todo
+    updateTodo(id:String,title:String):todo
   }
 `;
 
@@ -29,54 +30,100 @@ const client = new faunadb.Client({
 const resolvers = {
 
   Query: {
-    todos:async (parent,args,context)=>{     
-      try{
+    todos: async (parent, args, context) => {
+      try {
         var result = await client.query(
           query.Map(
             query.Paginate(query.Documents(query.Collection("todos"))),
             query.Lambda(x => query.Get(x))
           )
         )
-        const todos=result.data.map(todo=>({id:todo.ref.id,title:todo.data.title}))
+        const todos = result.data.map(todo => ({ id: todo.ref.id, title: todo.data.title }))
         return todos;
       }
-        catch(error) {
-          console.log('error', error)
-          // return "error.errorMessage"
-        }
+      catch (error) {
+        console.log('error', error)
+        // return "error.errorMessage"
+      }
     }
   },
-  Mutation:{
-    addTodo:async (_,{title})=>{
+  Mutation: {
+    addTodo: async (_, { title }) => {
       const item = {
-        data:{title:title}
+        data: { title: title }
       }
-      console.log("title",item)
+      console.log("title", item)
       /* construct the fauna query */
-      try{
-        const result=await client.query(query.Create(query.Collection('todos'), item))
-        console.log("result",result);
+      try {
+        const result = await client.query(query.Create(query.Collection('todos'), item))
+        console.log("result", result);
 
         return {
-          title:result.data.title,
-          id:result.ref.id
+          title: result.data.title,
+          id: result.ref.id
         }
       }
-      catch(error){
-        console.log("Error",error);
+      catch (error) {
+        console.log("Error", error);
         return {
-          title:"error",
-          id:"1"
+          title: "error",
+          id: "1"
+        }
+      }
+    },
+    deleteTodo: async (_, { id }) => {
+      console.log("id", id)
+      /* construct the fauna query */
+      try {
+        const result = await client.query(query.Delete(query.Ref(query.Collection('todos'), id)))
+        console.log("result", result);
+
+        return {
+          title: result.data.title,
+          id: result.ref.id
+        }
+      }
+      catch (error) {
+        console.log("Error", error);
+        return {
+          title: "error",
+          id: "1"
+        }
+      }
+    },
+    updateTodo: async (_, { id, title }) => {
+      console.log("id", id)
+      /* construct the fauna query */
+      const item = {
+        data: { title: title }
+      }
+      try {
+        const result = await client.query(query.Update(
+          query.Ref(query.Collection('todos'), id),
+          item,
+        ))
+        console.log("result", result);
+
+        return {
+          title: result.data.title,
+          id: result.ref.id
+        }
+      }
+      catch (error) {
+        console.log("Error", error);
+        return {
+          title: "error",
+          id: "1"
         }
       }
     }
   }
 };
 
-const server=new ApolloServer({
+const server = new ApolloServer({
   typeDefs,
   resolvers,
-  playground:true,
-  introspection:true
+  playground: true,
+  introspection: true
 });
-exports.handler=server.createHandler();
+exports.handler = server.createHandler();
