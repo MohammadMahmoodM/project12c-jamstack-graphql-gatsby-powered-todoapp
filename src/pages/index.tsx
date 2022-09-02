@@ -1,38 +1,51 @@
 import * as React from "react"
+import { useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
+import Todos from '../components/Todos';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
-import {useQuery} from '@apollo/client';
-import gql from 'graphql-tag'
 
-
-const getTodos=gql`
-  {
-    todos
-  }
-`
-const addTask=gql`
+const addTask = gql`
   mutation CreateATodo($title:String!) {
    addTodo(title:$title){
     title
   }
 }
 `
-const deleteTask=gql`
+const deleteTask = gql`
   mutation DeleteATodo($id:String!) {
    deleteTodo(id:$id){
     title
   }
 }
 `
+const updateTask = gql`
+mutation UpdateteATodo($id:String!,$title:String) {
+   updateTodo(id:$id,title:$title){
+    title
+  }
+}
+`
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '100%',
+      textAlign: 'center',
+    },
+    parent: {
+      textAlign: 'center'
+    }
+  }),
+);
 
 const IndexPage = () => {
-  const {loading,error,data}=useQuery(getTodos);
-
+  const classes = useStyles();
   return (
-    <main>
-      <title>Home Page</title>
+    <div className={classes.parent}>
+      <title>Todos</title>
       <h1>Todos</h1>
-    </main>
+      <Todos />
+    </div >
   )
 }
-
-export default IndexPage
