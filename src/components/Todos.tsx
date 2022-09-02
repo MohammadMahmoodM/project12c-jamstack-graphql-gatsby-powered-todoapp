@@ -107,9 +107,6 @@ const Todos: React.SFC<TodosProps> = () => {
     const {loading,error,data,refetch} = useQuery(getTodos);
     const [todos,setTodos]=React.useState(data);
     const [todo,setTodo]=React.useState('');
-    const [isUpdate,setIsUpdate]=React.useState(false);
-    const [fetchData, setFetchData] = React.useState(loading)
-    const [isLoading,setIsLoading]=React.useState(false);
     const [open, setOpen] = React.useState(false);
     const [modalStyle] = React.useState(getModalStyle);
     const [currentId, setCurrentId] = React.useState(null);
@@ -118,15 +115,6 @@ const Todos: React.SFC<TodosProps> = () => {
     const [addTodo] = useMutation(addTask)
     const [deleteTodo] = useMutation(deleteTask)
     const [updateTodo] = useMutation(updateTask)
-
-    React.useEffect(() => {
-        ; (async () => {
-            refetch();
-            setFetchData(false);
-        })()
-    }, [fetchData])
-
-
 
     const handleOpen = () => {
         setOpen(true);
@@ -147,10 +135,7 @@ const Todos: React.SFC<TodosProps> = () => {
                         setTodo('')
                         addTodo({variables:{title:value.todo},refetchQueries: [{ query: getTodos }],});
                         resetForm();
-                        setFetchData(true);
-                        setIsUpdate(false);
                         setCurrentId(null);
-
                     }}
 
                 >
@@ -220,8 +205,6 @@ const Todos: React.SFC<TodosProps> = () => {
                                                         refetchQueries: [{ query: getTodos }],
                                                     })
                                                         resetForm();
-                                                        setFetchData(true);
-                                                        setIsUpdate(false);
                                                         setCurrentId(null);
                                                         setCurrentTitle('');
                                                         handleClose();
@@ -281,8 +264,7 @@ const Todos: React.SFC<TodosProps> = () => {
                                             setTodo(todo.title);
                                             setCurrentId(todo.id)
                                             setCurrentTitle(todo.title)
-                                            setIsUpdate(true);
-                                            setOpen(true)
+                                            handleOpen()
                                         }}>
                                             <CreateOutlinedIcon />
                                         </IconButton>
@@ -303,7 +285,6 @@ const Todos: React.SFC<TodosProps> = () => {
                                                 showConfirmButton: false,
                                                 timer: 1500
                                               })
-                                            setFetchData(true);
                                         }}>
                                             <DeleteIcon />
                                         </IconButton>
