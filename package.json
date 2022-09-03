@@ -1,9 +1,9 @@
 {
-  "name": "my-gatsby-site",
+  "name": "gatsby-starter-minimal",
   "version": "1.0.0",
   "private": true,
-  "description": "my-gatsby-site",
-  "author": "mahmood",
+  "description": "A Gatsby starter with no plugins and a single welcome page.",
+  "author": "Ahsan Shah",
   "keywords": [
     "gatsby"
   ],
@@ -12,37 +12,25 @@
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "typecheck": "tsc --noEmit"
+    "clean": "gatsby clean"
   },
+  "license": "0BSD",
   "dependencies": {
-    "@apollo/client": "^3.6.9",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "apollo-link-context": "^1.0.20",
-    "apollo-link-http": "^1.5.17",
-    "apollo-server-lambda": "^3.10.2",
-    "cross-fetch": "^3.1.5",
-    "dotenv": "^16.0.2",
-    "formik": "^2.2.9",
-    "gatsby": "^4.22.0",
-    "gatsby-plugin-typescript": "^4.22.0",
-    "graphql": "^15.8.0",
-    "graphql-tag": "^2.12.6",
-    "graphql-tools": "^8.3.4",
-    "node-fetch": "^2.6.7",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "@apollo/client": "^3.3.6",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "@typescript-eslint/parser": "^3.8.0",
+    "cross-fetch": "^3.0.6",
+    "dotenv": "^8.2.0",
+    "formik": "^2.2.6",
+    "gatsby": "^2.26.1",
+    "gatsby-plugin-typescript": "^2.4.17",
+    "graphql-tag": "^2.11.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-loading": "^2.0.3",
-    "sweetalert2": "^11.4.29",
-    "yup": "^0.32.11"
-  },
-  "devDependencies": {
-    "@types/node": "^17.0.45",
-    "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "typescript": "^4.8.2"
+    "sweetalert2": "^10.12.5",
+    "yup": "^0.32.8"
   }
 }

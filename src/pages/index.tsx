@@ -3,6 +3,9 @@ import Todos from '../components/Todos';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 
+
+
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -14,6 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     }),
 );
+
+
 const IndexPage = () => {  
   const classes=useStyles();
   return (
@@ -26,4 +31,5 @@ const IndexPage = () => {
     </div>
   )
 }
+
 export default IndexPage

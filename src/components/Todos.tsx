@@ -53,6 +53,7 @@ function getModalStyle() {
         top: `${top}%`,
         left: `${left}%`,
         transform: `translate(-${top}%, -${left}%)`,
+        alignItems: "center", justifyContent: "center" 
     };
 }
 
@@ -64,6 +65,7 @@ const getTodos=gql`
       }
   }
 `
+
 
 const addTask=gql`
   mutation CreateATodo($title:String!) {
@@ -116,6 +118,8 @@ const Todos: React.SFC<TodosProps> = () => {
     const [deleteTodo] = useMutation(deleteTask)
     const [updateTodo] = useMutation(updateTask)
 
+
+
     const handleOpen = () => {
         setOpen(true);
     };
@@ -126,7 +130,7 @@ const Todos: React.SFC<TodosProps> = () => {
 
     return(
         <div>
-              <div>
+             <div>
                 <Formik
                     initialValues={{ todo: todo }}
                     validationSchema={schema}
@@ -172,6 +176,7 @@ const Todos: React.SFC<TodosProps> = () => {
 
                 </Formik>
             </div>
+
 
 
             {loading &&<CircularProgress />}
@@ -250,16 +255,9 @@ const Todos: React.SFC<TodosProps> = () => {
                                                     )}
 
                                                 </Formik>
-
                                             </div>
-
                                         </Modal>
                                         <IconButton edge="end" aria-label="delete" onClick={() => {
-                                            // console.log('Update Button', todo.ref['@ref'].id);
-                                            // setTodo(todo.data.title);
-                                            // setCurrentId(todo.ref['@ref'].id)
-                                            // setCurrentTitle(todo.data.title)
-                                            // setIsUpdate(true);
                                             console.log('Update Button', todo.id);
                                             setTodo(todo.title);
                                             setCurrentId(todo.id)
@@ -269,9 +267,6 @@ const Todos: React.SFC<TodosProps> = () => {
                                             <CreateOutlinedIcon />
                                         </IconButton>
                                         <IconButton edge="end" aria-label="delete" onClick={async () => {
-                                            // console.log('Delete Button', todo.ref['@ref'].id);
-                                            // var result = await deleteTodo(todo.ref['@ref'].id);
-                                            // console.log("result", result);
                                             deleteTodo({
                                                 variables:{
                                                     id:todo.id
@@ -296,7 +291,7 @@ const Todos: React.SFC<TodosProps> = () => {
             </Grid>
 }
             {error && <div>error:</div>}
-
+            
         </div>
     )
 
